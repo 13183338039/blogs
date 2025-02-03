@@ -84,5 +84,5 @@ jobs:
           cd /opt/app/frontend
           tar -xzf package.tar.gz
           ls -la
-          npm install -g serve
-          nohup serve -s dist -l 0.0.0.0:3000 > serve.log 2>&1 &
+          npm install http-server -g
+          http-server
