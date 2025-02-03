@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2 # 检出代码，包括 deploy.sh 文件
+      - name: Debug Secrets
+        run: echo "Host is:${{ secrets.ALIYUN_HOST }}"
 
       - name: Deploy to Remote Server
         uses: appleboy/ssh-action@master
