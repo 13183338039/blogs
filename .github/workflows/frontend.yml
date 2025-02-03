@@ -33,7 +33,6 @@ jobs:
         host: ${{ secrets.ALIYUN_HOST }}
         username: ${{ secrets.ALIYUN_USERNAME }}
         key: ${{ secrets.ALIYUN_SSH_KEY }}
-        passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
           PID=$(pgrep node) && kill -9 $PID || echo "No application running"
     - name: Clean Old Application
