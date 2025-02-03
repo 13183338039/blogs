@@ -43,7 +43,7 @@ jobs:
         key: ${{ secrets.ALIYUN_SSH_KEY }}
         passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
-          rm -rf /opt/app/frontend
+          sudo rm -rf /opt/app/frontend
 
     - name: Check the content of the repository
       run: ls -la ./dist
