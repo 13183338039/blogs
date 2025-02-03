@@ -35,8 +35,7 @@ jobs:
         key: ${{ secrets.ALIYUN_SSH_KEY }}
         passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
-          pgrep node && pkill node || echo "No application running"
-
+          PID=$(pgrep node) && kill -9 $PID || echo "No application running"
     - name: Clean Old Application
       uses: appleboy/ssh-action@v0.1.1
       with:
