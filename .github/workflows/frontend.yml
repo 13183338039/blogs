@@ -1,0 +1,90 @@
+name: frontend build
+
+on:
+  push:
+    branches:
+      - frontend
+  pull_request:
+    branches:
+      - frontend
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [21.x]
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: ls -la ./dist
+
+    - name: Stop Old Application
+      uses: appleboy/ssh-action@v0.1.1
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
+        script: |
+          pgrep node && pkill node || echo "No application running"
+
+    - name: Clean Old Application
+      uses: appleboy/ssh-action@v0.1.1
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
+        script: |
+          rm -rf /opt/app/frontend
+
+    - name: Check the content of the repository
+      run: ls -la ./dist
+
+    - name: Package package.json
+      run: |
+        cp package.json ./dist/
+        tar -czf package.tar.gz -C ./dist package.json
+
+    - name: Deploy package.json to Alibaba Cloud
+      uses: appleboy/scp-action@v0.1.0
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
+        source: "./package.tar.gz"
+        target: "/opt/app/frontend"
+
+    - name: Deploy to Alibaba Cloud
+      uses: appleboy/scp-action@v0.1.0
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
+        source: "./dist/*"
+        target: "/opt/app/frontend"
+        
+    - name: Start New Application
+      uses: appleboy/ssh-action@v0.1.1
+      with:
+        host: ${{ secrets.ALIYUN_HOST }}
+        username: ${{ secrets.ALIYUN_USERNAME }}
+        key: ${{ secrets.ALIYUN_SSH_KEY }}
+        passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
+        script: |
+          cd /opt/app/frontend
+          tar -xzf package.tar.gz
+          ls -la
+          npm install -g serve
+          nohup serve -s dist -l 3000 > serve.log 2>&1 &
