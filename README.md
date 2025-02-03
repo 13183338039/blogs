@@ -1,7 +1,7 @@
 ### 工具获取
 
 * xshell 6 绿色破解版：关注公众号：JavaCat，回复 xshell 获取
-* Navicat 11 简体中文版：关注公众号：JavaCat，回复 navicat 获取
+* Navicat 11 简体中文版：关注公众号：JavaCat，回复 navicat 获取1
 
 公众号二维码：
 
