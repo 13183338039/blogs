@@ -55,8 +55,8 @@ jobs:
         passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
           cd /home/blogs_vue
-          mv /home/temp/node_modules /home/blogs_vue/
-          mv /home/temp/package-lock.json /home/blogs_vue/
+          cp -r /home/temp/node_modules /home/blogs_vue/
+          cp -r /home/temp/package-lock.json /home/blogs_vue/
           lsof -i :8081 -t | xargs kill -9
           nohup npm run serve -- --port 8081 > vue.log 2>&1 &
 
