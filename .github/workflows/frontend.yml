@@ -33,7 +33,7 @@ jobs:
         username: ${{ secrets.ALIYUN_USERNAME }}
         key: ${{ secrets.ALIYUN_SSH_KEY }}
         script: |
-          cd /home/blogs
+          cd /home/blogs_vue
           git pull origin frontend
     - name: Clean Old node_modules
       uses: appleboy/ssh-action@v0.1.1
@@ -43,8 +43,8 @@ jobs:
         key: ${{ secrets.ALIYUN_SSH_KEY }}
         passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
-          rm -rf /home/blogs/node_modules
-          rm -rf /home/blogs/package-lock.json
+          rm -rf /home/blogs_vue/node_modules
+          rm -rf /home/blogs_vue/package-lock.json
 
     - name: start new
       uses: appleboy/ssh-action@v0.1.1
@@ -54,8 +54,10 @@ jobs:
         key: ${{ secrets.ALIYUN_SSH_KEY }}
         passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
-          cd /home/blogs
-          npm install
-          npm run serve
+          cd /home/blogs_vue
+          mv /home/temp/node_modules /home/blogs_vue/
+          mv /home/temp/package-lock.json /home/blogs_vue/
+          lsof -i :8081 -t | xargs kill -9
+          nohup npm run serve -- --port 8081 > vue.log 2>&1 &
 
         
