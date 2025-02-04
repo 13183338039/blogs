@@ -54,6 +54,7 @@ jobs:
         key: ${{ secrets.ALIYUN_SSH_KEY }}
         passphrase: ${{ secrets.ALIYUN_SSH_PASSPHRASE }}
         script: |
+          cd /home/blogs
           npm install
           npm run serve
 
