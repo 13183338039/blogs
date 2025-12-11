@@ -1,3 +1,40 @@
+# 开发日志
+
+## 准备
+
+### 启动数据库
+
+musql -u root -p
+
+表blog_articles
+
+| id     | user_id | title   | description | content  | created  |
+| ------ | ------- | ------- | ----------- | -------- | -------- |
+| bigint | bigint  | varchar | varchar     | longtext | datetime |
+| 主键   | 用户id  | 标题    | 概述        | 正文     | 创建时间 |
+
+表users
+
+| id     | username | avatar  | email   | password | status | created  | last_login   | permission |
+| ------ | -------- | ------- | ------- | -------- | ------ | -------- | ------------ | ---------- |
+| bigint | varchar  | varchar | varchar | varchar  | int    | datetime | datetime     | varchar    |
+| 主键   | 用户名   |         | 邮箱    | 密码     |        | 创建时间 | 上次登陆时间 | 权限       |
+
+
+
+### 启动redis
+
+启动服务器：redis-server
+
+启动客户端：redis-cli
+
+
+
+
+
+
+
+
 ### 工具获取
 
 * xshell 6 绿色破解版：关注公众号：JavaCat，回复 xshell 获取

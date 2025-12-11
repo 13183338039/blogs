@@ -2,6 +2,12 @@ mybatis-plus:
   mapper-locations: classpath*:/mapper/**Mapper.xml
 server:
   port: 8081
+spring:
+  data:
+    elasticsearch:
+      uris: http://localhost:9200
+      connection-timeout: 5s
+      socket-timeout: 60s
 markerhub:
   jwt:
     secret: f4e2e52034348f86b67cde581c0f9eb5

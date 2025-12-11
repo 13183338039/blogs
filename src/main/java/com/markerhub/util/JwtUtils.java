@@ -33,22 +33,23 @@ public class JwtUtils {
         Date nowDate = new Date();
         //过期时间
         Date expireDate = new Date(nowDate.getTime() + expire * 1000);
-        Key key = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SignatureAlgorithm.HS512.getJcaName());
-        byte[] apiKeySecretBytes = secret.getBytes(); // 将字符串密钥转为字节数组
+        // 使用UTF-8字符集将字符串密钥转为字节数组，与验证时保持一致
+        byte[] apiKeySecretBytes = secret.getBytes(StandardCharsets.UTF_8);
         return Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setSubject(userId+"")
                 .setIssuedAt(nowDate)
                 .setExpiration(expireDate)
-                //.signWith(SignatureAlgorithm.HS512, secret)
                 .signWith(SignatureAlgorithm.HS512, apiKeySecretBytes) // 签名
                 .compact();
     }
 
     public Claims getClaimByToken(String token) {
         try {
+            // 使用字节数组进行验证，与生成token时保持一致
+            byte[] apiKeySecretBytes = secret.getBytes(StandardCharsets.UTF_8);
             return Jwts.parser()
-                    .setSigningKey(secret)
+                    .setSigningKey(apiKeySecretBytes)
                     .parseClaimsJws(token)
                     .getBody();
         }catch (Exception e){

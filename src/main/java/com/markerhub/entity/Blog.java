@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("m_blog")
+@TableName("blog_articles")
 public class Blog implements Serializable {
 
     private static final long serialVersionUID = 1L;
